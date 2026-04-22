@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -9,14 +11,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace FinanceApp
+namespace FinanceApp.Components.AccountCard
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for AccountCard.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class AccountCard : UserControl
     {
-        public MainWindow()
+        public AccountCard()
         {
             InitializeComponent();
         }

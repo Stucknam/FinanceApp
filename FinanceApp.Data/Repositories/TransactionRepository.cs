@@ -33,5 +33,13 @@ namespace FinanceApp.Data.Repositories
                 .Where(t => t.AccountId == accountId && t.Date >= from && t.Date <= to)
                 .ToListAsync();
         }
+        public async Task<List<Transaction>> GetLastNonTransferAsync(int count)
+        {
+            return await _dbSet.Where(t => t.Type != CategoryType.Transfer)
+                .OrderByDescending(t => t.Date)
+                .Take(count)
+                .ToListAsync();
+        }
+
     }
 }

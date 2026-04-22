@@ -24,7 +24,7 @@ namespace FinanceApp.Data.Repositories
 
         public virtual async Task<List<T>> GetAllAsync()
         {
-            return await _dbSet.ToListAsync();
+            return await _dbSet.AsNoTracking().ToListAsync();
         }
 
         public virtual async Task<T?> GetByIdAsync(Guid id)
@@ -44,9 +44,14 @@ namespace FinanceApp.Data.Repositories
         }
 
         public virtual async Task UpdateAsync(T entity)
-        {
+        {  
             _dbSet.Update(entity);
             await _context.SaveChangesAsync();
+        }
+
+        public virtual IQueryable<T> Query()
+        {
+            return _dbSet.AsQueryable();
         }
     }
 }

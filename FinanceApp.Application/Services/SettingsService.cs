@@ -15,6 +15,7 @@ namespace FinanceApp.Application.Services
         private Guid? _defaultAccountId;
         private List<Guid> _hiddenAccounts = new();
         private ApplicationTheme _theme = ApplicationTheme.Light;
+        private static readonly SemaphoreSlim semLock = new(1, 1);
 
         public Guid? DefaultAccountId
         {
@@ -94,7 +95,13 @@ namespace FinanceApp.Application.Services
                 WriteIndented = true
             });
 
-            await File.WriteAllTextAsync(_filePath, json);
+            await semLock.WaitAsync();
+            try
+            {
+                
+                await File.WriteAllTextAsync(_filePath, json);
+            } finally { semLock.Release(); }
+            
         }
     }
 }

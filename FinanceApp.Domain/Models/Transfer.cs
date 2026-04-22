@@ -18,7 +18,7 @@ namespace FinanceApp.Domain.Models
         [Required]
         public decimal Amount { get; set; } = decimal.Zero;
         public string Description { get; set; } = string.Empty;
-        public DateTime Date { get; set; } = DateTime.Now;
+        public DateTime Date { get; set; } = DateTime.UtcNow;
 
         // Навигационные свойства
         public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();

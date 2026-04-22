@@ -17,5 +17,9 @@ namespace FinanceApp.Domain.Interfaces.Srevices
         Task UpdateAsync(Transfer transfer);
         Task DeleteAsync(Guid transferId);
 
+        Task<Transfer> CreateTransferAsync(Guid fromId, Guid toId, decimal amount, string description);
+
+        Task<List<Transfer>> GetLastTransfersAsync(int count);
+
     }
 }

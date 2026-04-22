@@ -1,4 +1,6 @@
 ﻿using FinanceApp.Application.Services;
+using FinanceApp.ConsoleUI.Menu;
+using FinanceApp.ConsoleUI.Output;
 using FinanceApp.Data;
 using FinanceApp.Data.Repositories;
 using FinanceApp.Domain.Interfaces.Repositories;
@@ -7,29 +9,38 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Configuration;
-using System.Data;
-using System.Windows;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace FinanceApp
+namespace FinanceApp.ConsoleUI.DI
 {
-
-    public partial class App : System.Windows.Application
+    public static class ConsoleBootstrapper
     {
-        public static IHost AppHost { get; private set; } = null!;
-
-        public App()
+        public static IHost Build()
         {
-            AppHost = Host.CreateDefaultBuilder()
+            return Host.CreateDefaultBuilder()
                 .ConfigureAppConfiguration(config =>
                 {
-                    config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                    config.AddJsonFile("appsettings.json", optional: false);
                 })
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                })
+
                 .ConfigureServices((context, services) =>
                 {
                     var connectionString = context.Configuration.GetConnectionString("DefaultConnection");
                     // Подключаем DBContext
-                    services.AddDbContext<FinanceDbContext>(options => options.UseNpgsql(connectionString));
+                    services.AddDbContext<FinanceDbContext>(options => {
+                        options.UseNpgsql(connectionString); 
+                        options.EnableSensitiveDataLogging(false);
+                        options.EnableDetailedErrors(false);
+                        options.LogTo(_ => { }, LogLevel.None); 
+                    });
 
                     services.AddSingleton<AppPaths>();
 
@@ -51,38 +62,19 @@ namespace FinanceApp
                     services.AddScoped<ITransactionService, TransactionService>();
                     services.AddScoped<ITransferService, TransferService>();
                     services.AddScoped<ICategoryService, CategoryService>();
+                    services.AddScoped<IStatisticsService, StatisticsService>();
 
-                    //
                     
+                    services.AddSingleton<IConsolePrinter, ConsolePrinter>();
+                    services.AddSingleton<IPaginationService, PaginateService>();
+                    services.AddSingleton<AccountsMenu>();
+                    services.AddSingleton<TransactionsMenu>();
+                    services.AddSingleton<MainMenu>();
 
-                    services.AddSingleton<MainWindow>();
+                    services.AddSingleton<ConsoleHelper>();
+
                 })
                 .Build();
-
-
-        }
-
-        protected override async void OnStartup(StartupEventArgs e)
-        {
-            await AppHost.StartAsync();
-
-            var settings = AppHost.Services.GetRequiredService<ISettingsService>();
-            await settings.LoadAsync();
-
-
-
-            var mainWindow = AppHost.Services.GetRequiredService<MainWindow>();
-            mainWindow.Show();
-            base.OnStartup(e);
-        }
-
-        protected override async void OnExit(ExitEventArgs e)
-        {
-            await AppHost.StopAsync();
-            AppHost.Dispose();
-            base.OnExit(e);
-
         }
     }
-
 }

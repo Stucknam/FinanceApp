@@ -31,12 +31,14 @@ namespace FinanceApp.Application.Services
         public async Task DeleteAsync(Guid id)
         {
             var account = await _accountRepository.GetByIdAsync(id) ?? throw new KeyNotFoundException("Account not found");
-            await _accountRepository.DeleteAsync(account);
+            account.IsDeleted = true;
+            await _accountRepository.UpdateAsync(account);
         }
 
-        public Task<List<Account>> GetAccountsAsync()
+        public async Task<List<Account>> GetAccountsAsync()
         {
-            return _accountRepository.GetAllAsync();
+            var accounts = await _accountRepository.GetAllAsync();
+            return [.. accounts.Where(a => !a.IsDeleted)];
         }
 
         public async Task<decimal> GetBalanceAsync(Guid accountId)
@@ -51,44 +53,14 @@ namespace FinanceApp.Application.Services
 
         public async Task<Account?> GetDefaultAccountAsync()
         {
-            // 1. Если в настройках есть ID — пробуем загрузить
-            if (_settingsService.DefaultAccountId != null)
-            {
-                var account = await _accountRepository.GetByIdAsync(_settingsService.DefaultAccountId.Value);
+            var defaultId = _settingsService.DefaultAccountId;
 
-                if (account != null)
-                    return account;
+            if (defaultId == null)
+                return null;
 
-                // если в настройках ID есть, но счёта нет — сбрасываем
-                _settingsService.DefaultAccountId = null;
-                await _settingsService.SaveAsync();
-            }
-
-            // 2. Если в настройках нет — ищем первый счёт
-            var accounts = await _accountRepository.GetAllAsync();
-
-            if (accounts.Count != 0)
-            {
-                var first = accounts.First();
-                _settingsService.DefaultAccountId = first.Id;
-                await _settingsService.SaveAsync();
-                return first;
-            }
-
-            // 3. Если нет ни одного счёта — создаём дефолтный
-            var defaultAccount = new Account
-            {
-                Name = "Основной счёт",
-                Amount = 0
-            };
-
-            await _accountRepository.AddAsync(defaultAccount);
-
-            _settingsService.DefaultAccountId = defaultAccount.Id;
-            await _settingsService.SaveAsync();
-
-            return defaultAccount;
+            return await _accountRepository.GetByIdAsync(defaultId.Value);
         }
+
 
         // Вычисляем прибыль за период: (доходы + входящие переводы) - (расходы + исходящие переводы)
         public async Task<decimal> GetProfitAsync(Guid accountId, DateTime from, DateTime to)
@@ -106,7 +78,7 @@ namespace FinanceApp.Application.Services
         public async Task<List<Account>> GetVisibleAccountsAsync()
         {
             var accounts = await _accountRepository.GetAllAsync();
-            var hidden = _settingsService.HiddenAccounts;    
+            var hidden = _settingsService.HiddenAccounts;
 
             var visibleAccounts = accounts.Where(a => !hidden.Contains(a.Id)).ToList();
             return visibleAccounts;
@@ -127,7 +99,7 @@ namespace FinanceApp.Application.Services
                 _settingsService.HiddenAccounts.Add(accountId);
                 await _settingsService.SaveAsync();
             }
-            
+
         }
 
         public async Task SetDefaultAccountAsync(Guid accountId)
@@ -148,6 +120,23 @@ namespace FinanceApp.Application.Services
         public async Task UpdateAsync(Account account)
         {
             await _accountRepository.UpdateAsync(account);
+        }
+
+        public async Task SeedDefaultAccountAsync()
+        {
+            var accounts = await _accountRepository.GetAllAsync();
+            if (accounts.Count == 0)
+            {
+                var defaultAccount = new Account
+                {
+                    Name = "Основной счёт",
+                    Amount = 0,
+                    Description = "Создан автоматически"
+                };
+                await _accountRepository.AddAsync(defaultAccount);
+                _settingsService.DefaultAccountId = defaultAccount.Id;
+                await _settingsService.SaveAsync();
+            }
         }
     }
 }

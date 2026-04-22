@@ -2,27 +2,54 @@
 using FinanceApp.Domain.Interfaces.Repositories;
 using FinanceApp.Domain.Interfaces.Srevices;
 using FinanceApp.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Runtime.CompilerServices;
 
 namespace FinanceApp.Application.Services
 {
     public class TransactionService : ITransactionService
     {
         private readonly ITransactionRepository _transactionRepository;
-        private readonly IAccountService _accountService;
+        private readonly IAccountRepository _accountRepository;
 
-        public TransactionService(ITransactionRepository transactionRepository, IAccountService accountService)
+        public TransactionService(ITransactionRepository transactionRepository, IAccountRepository accountRepository)
         {
             _transactionRepository = transactionRepository;
-            _accountService = accountService;
+            _accountRepository = accountRepository;
         }
         public async Task<Transaction> CreateAsync(Transaction transaction)
         {
-            await _transactionRepository.AddAsync(transaction);
-            return transaction;
+            var account = await _accountRepository.GetByIdAsync(transaction.AccountId)
+                ?? throw new Exception("Account not found");
+
+            var newTransaction = new Transaction
+            {
+                AccountId = transaction.AccountId,
+                Amount = transaction.Amount,
+                Description = transaction.Description,
+                CategoryId = transaction.CategoryId,
+                TransferId = transaction.TransferId,
+                Type = transaction.Type
+            };
+
+            await _transactionRepository.AddAsync(newTransaction);
+
+            switch (transaction.Type)
+            {
+                case CategoryType.Income:
+                    account.Amount += transaction.Amount;
+                    break;
+                case CategoryType.Expense:
+                    account.Amount -= transaction.Amount;
+                    break;
+            }
+            //account.Amount += transaction.Amount;
+
+            await _accountRepository.UpdateAsync(account);
+
+            return newTransaction;
         }
+
+       
 
         public async Task DeleteAsync(Guid id)
         {
@@ -33,7 +60,7 @@ namespace FinanceApp.Application.Services
 
         public async Task<List<Transaction>> GetByAccountAsync(Guid accountId, DateTime from, DateTime to)
         {
-            _ = await _accountService.GetByIdAsync(accountId) 
+            _ = await _accountRepository.GetByIdAsync(accountId) 
                 ?? throw new KeyNotFoundException("Account not found.");
 
             return await _transactionRepository.GetByAccountAndPeriodAsync(accountId, from, to);
@@ -60,5 +87,17 @@ namespace FinanceApp.Application.Services
         {
             await _transactionRepository.UpdateAsync(transaction);
         }
+
+
+        public async Task<List<Transaction>> GetAllAsync()
+        {
+            return await _transactionRepository.GetAllAsync();
+        }
+
+        public async Task<List<Transaction>> GetLastNonTransferAsync(int count)
+        {
+            return await _transactionRepository.GetLastNonTransferAsync(count);
+        }
+
     }
 }

@@ -19,7 +19,7 @@ namespace FinanceApp.Domain.Models
         public Category? Category { get; set; }
 
         public decimal Amount { get; set; } = decimal.Zero;
-        public DateTime Date { get; set; } = DateTime.Now;
+        public DateTime Date { get; set; } = DateTime.UtcNow;
         public string Description { get; set; } = string.Empty;
         public Guid? TransferId { get; set; }
         public Transfer? Transfer { get; set; }

@@ -15,6 +15,7 @@ namespace FinanceApp.Domain.Models
         public string? IconId { get; set; } = string.Empty; // Default icon ID
         public string Color { get; set; } = DefaultColors.DefaultColor; // Default color
         public string Description { get; set; } = string.Empty;
+        public bool IsDeleted { get; set; } = false;
 
         // Навигационные свойства
 

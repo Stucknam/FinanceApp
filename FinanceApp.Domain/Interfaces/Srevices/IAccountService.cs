@@ -24,5 +24,7 @@ namespace FinanceApp.Domain.Interfaces.Srevices
 
         public Task HideAccountAsync(Guid accountId);
         public Task ShowAccountAsync(Guid accountId);
+
+        public Task SeedDefaultAccountAsync();
     }
 }
