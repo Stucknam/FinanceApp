@@ -3,5 +3,5 @@
   <Project Path="FinanceApp.ConsoleUI/FinanceApp.ConsoleUI.csproj" Id="62deaaa7-0ac5-4eee-be06-b24f15bfe950" />
   <Project Path="FinanceApp.Data/FinanceApp.Data.csproj" />
   <Project Path="FinanceApp.Domain/FinanceApp.Domain.csproj" />
-  <Project Path="FinanceApp/FinanceApp.csproj" />
+  <Project Path="FinanceApp/FinanceApp.WPF.csproj" />
 </Solution>
