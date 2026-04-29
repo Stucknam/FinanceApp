@@ -58,7 +58,7 @@ namespace FinanceApp.ConsoleUI.Menu
                         break;
                     case "3": 
                         break;
-                    case "q": _printer.Print("Спасибо за использование приложения \"Мои финансы!\" До свидания!", MessageType.Accent); 
+                    case "q": _printer.Print("Спасибо за использование приложения \"Мои финансы\" До свидания!", MessageType.Accent); 
                         return;
                     default:
 

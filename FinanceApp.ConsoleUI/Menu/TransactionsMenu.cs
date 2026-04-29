@@ -200,7 +200,8 @@ namespace FinanceApp.ConsoleUI.Menu
             if (list.Count == 0)
             {
                 _printer.Print("Транзакций пока нет.", MessageType.Accent);
-                await Task.Delay(800);
+                _printer.Print("Нажмите любую клавишу, чтобы вернуться назад.", MessageType.Info);
+                Console.ReadKey();
                 return;
             }
 
@@ -259,7 +260,8 @@ namespace FinanceApp.ConsoleUI.Menu
             if (transfers.Count == 0)
             {
                 _printer.Print("Переводов пока нет.", MessageType.Accent);
-                await Task.Delay(800);
+                _printer.Print("Нажмите любую клавишу, чтобы вернуться назад.", MessageType.Info);
+                Console.ReadKey();
                 return;
             }
 
