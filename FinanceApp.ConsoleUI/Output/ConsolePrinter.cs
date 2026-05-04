@@ -59,13 +59,13 @@ namespace FinanceApp.ConsoleUI.Output
 
         public void PrintTitle(string title)
         {
-            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.ForegroundColor = ConsoleColor.Cyan;
 
             string line = new string('=', title.Length + 8);
 
-            Console.WriteLine(line);
-            Console.WriteLine($"=== {title} ===");
-            Console.WriteLine(line);
+            //Console.WriteLine(line);
+            Console.WriteLine($"<< {title} >>");
+            //Console.WriteLine(line);
 
             Console.ResetColor();
         }
