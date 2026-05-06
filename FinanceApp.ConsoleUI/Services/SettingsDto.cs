@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace FinanceApp.Domain.DTO
+namespace FinanceApp.ConsoleUI.Services
 {
     public class SettingsDto
     {

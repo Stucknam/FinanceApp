@@ -1,6 +1,7 @@
 ﻿using FinanceApp.ConsoleUI.Output;
 using FinanceApp.Domain.Interfaces.Srevices;
 using FinanceApp.Domain.Models;
+using FinanceApp.ConsoleUI.Services;
 using Npgsql.PostgresTypes;
 using System;
 using System.Collections;
@@ -17,7 +18,7 @@ namespace FinanceApp.ConsoleUI.Menu
         private readonly IConsolePrinter _printer;
         private readonly IAccountService _account;
         private readonly IPaginationService _pager;
-        private readonly ISettingsService _settings;
+        private readonly Services.ISettingsService _settings;
         private readonly ITransactionService _transaction;
         private readonly ITransferService _transfer;
         private readonly ConsoleHelper _helper;
@@ -281,7 +282,9 @@ namespace FinanceApp.ConsoleUI.Menu
         private async Task TransferAsync(PaginationResult<Account> pages, List<Account> accounts)
         {
             // 1. Получаем default-счёт (если есть)
-            var defaultAccount = await _account.GetDefaultAccountAsync();
+            var defaultAccountId = _settings.GetDefaultAccountId();
+
+            var defaultAccount = accounts.FirstOrDefault(a => a.Id == defaultAccountId);
 
             // 2. Выбор источника
             Account? from;

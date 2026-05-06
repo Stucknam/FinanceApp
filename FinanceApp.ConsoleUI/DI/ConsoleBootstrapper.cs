@@ -1,10 +1,12 @@
 ﻿using FinanceApp.Application.Services;
 using FinanceApp.ConsoleUI.Menu;
 using FinanceApp.ConsoleUI.Output;
+using FinanceApp.ConsoleUI.Services;
 using FinanceApp.Data;
 using FinanceApp.Data.Repositories;
 using FinanceApp.Domain.Interfaces.Repositories;
 using FinanceApp.Domain.Interfaces.Srevices;
+using FinanceApp.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -75,6 +77,26 @@ namespace FinanceApp.ConsoleUI.DI
 
                 })
                 .Build();
+        }
+
+        public static async Task SeedDataAsync(this IHost host)
+        {
+            using var scope = host.Services.CreateScope();
+            var accountService = scope.ServiceProvider.GetRequiredService<IAccountService>();
+            var settingsService = scope.ServiceProvider.GetRequiredService<ISettingsService>();
+
+            var accounts = await accountService.GetAccountsAsync();
+            if (accounts.Count == 0)
+            {
+                var defaultAccount = await accountService.CreateAsync(new Account
+                {
+                    Name = "Основной счёт",
+                    Amount = 0,
+                    Description = "Создан автоматически"
+                });
+                settingsService.SetDefaultAccountId(defaultAccount.Id);
+            
+            }
         }
     }
 }

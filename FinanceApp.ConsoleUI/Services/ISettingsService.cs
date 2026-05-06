@@ -1,9 +1,10 @@
 ﻿using FinanceApp.Domain.Enums;
+using FinanceApp.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace FinanceApp.Domain.Interfaces.Srevices
+namespace FinanceApp.ConsoleUI.Services
 {
     public interface ISettingsService
     {
@@ -14,6 +15,12 @@ namespace FinanceApp.Domain.Interfaces.Srevices
 
         Task LoadAsync();
         Task SaveAsync();
+
+        public Guid? GetDefaultAccountId();
+        public void SetDefaultAccountId(Guid accountId);
+
+        public void HideAccount(Guid accountId);
+        public void ShowAccount(Guid accountId);
 
     }
 }

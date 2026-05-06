@@ -1,12 +1,12 @@
-﻿using FinanceApp.Domain.DTO;
+﻿
 using FinanceApp.Domain.Enums;
-using FinanceApp.Domain.Interfaces.Srevices;
+using Npgsql.Replication.PgOutput;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
 
-namespace FinanceApp.Application.Services
+namespace FinanceApp.ConsoleUI.Services 
 {
     public class SettingsService : ISettingsService
     {
@@ -102,6 +102,26 @@ namespace FinanceApp.Application.Services
                 await File.WriteAllTextAsync(_filePath, json);
             } finally { semLock.Release(); }
             
+        }
+
+        public Guid? GetDefaultAccountId()
+        {
+            return DefaultAccountId;
+        }
+
+        public void SetDefaultAccountId(Guid accountId)
+        {
+            DefaultAccountId = accountId;
+        }
+
+        public void HideAccount(Guid accountId)
+        {
+            HiddenAccounts.Add(accountId);
+        }
+
+        public void ShowAccount(Guid accountId)
+        {
+            HiddenAccounts.Remove(accountId);
         }
     }
 }

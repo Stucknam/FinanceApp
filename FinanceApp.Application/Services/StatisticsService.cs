@@ -14,24 +14,24 @@ namespace FinanceApp.Application.Services
         {
             _accounts = accounts;
         }
-        public async Task<decimal> GetBalanceForVisibleAccountsAsync()
-        {
-            var accounts = await _accounts.GetVisibleAccountsAsync();
+        //public async Task<decimal> GetBalanceForVisibleAccountsAsync()
+        //{
+        //    var accounts = await _accounts.GetVisibleAccountsAsync();
 
-            return accounts.Sum(a => a.Amount);
-        }
+        //    return accounts.Sum(a => a.Amount);
+        //}
 
-        public async Task<decimal> GetProfitForVisibleAsync(DateTime from, DateTime to)
-        {
-            var accounts = await _accounts.GetVisibleAccountsAsync();
+        //public async Task<decimal> GetProfitForVisibleAsync(DateTime from, DateTime to)
+        //{
+        //    var accounts = await _accounts.GetVisibleAccountsAsync();
 
-            var tasks = accounts
-                .Select(a => _accounts.GetProfitAsync(a.Id, from, to));
+        //    var tasks = accounts
+        //        .Select(a => _accounts.GetProfitAsync(a.Id, from, to));
 
-            var results = await Task.WhenAll(tasks);
+        //    var results = await Task.WhenAll(tasks);
 
-            return results.Sum();
-        }
+        //    return results.Sum();
+        //}
 
         public async Task<decimal> GetTotalBalanceAsync()
         {
