@@ -1,4 +1,5 @@
 using FinanceApp.Api.DependencyInjection;
+using FinanceApp.Api.Endpoints;
 using FinanceApp.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -44,5 +45,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapAccountsEndpoints();
+
 
 app.Run();
