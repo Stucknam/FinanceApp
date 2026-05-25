@@ -9,7 +9,7 @@ namespace FinanceApp.Api.Endpoints
     {
         public static void MapAccountsEndpoints(this IEndpointRouteBuilder app)
         {
-            var group = app.MapGroup("/accounts");
+            var group = app.MapGroup("/accounts").WithTags("Accounts");
 
             // 1. GET /accounts
             group.MapGet("/", async (IAccountService service) =>

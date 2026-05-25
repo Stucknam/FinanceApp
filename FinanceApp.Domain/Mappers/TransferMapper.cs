@@ -21,5 +21,30 @@ namespace FinanceApp.Domain.Mappers
             };
 
         }
+        public static Transfer ToModel(this CreateTransferDto dto)
+        {
+            return new Transfer
+            {
+                Id = Guid.NewGuid(),
+                AccountFromId = dto.AccountFromId,
+                AccountToId = dto.AccountToId,
+                Amount = dto.Amount,
+                Description = dto.Description ?? string.Empty,
+                Date = dto.Date ?? DateTime.UtcNow
+            };
+        }
+        public static Transfer ToModel(this TransferDto dto)
+        {
+            return new Transfer
+            {
+                Id = dto.Id,
+                AccountFromId = dto.AccountFromId,
+                AccountToId = dto.AccountToId,
+                Amount = dto.Amount,
+                Description = dto.Description ?? string.Empty,
+                Date = dto.Date
+            };
+        }
+
     }
 }

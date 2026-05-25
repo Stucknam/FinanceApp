@@ -12,6 +12,7 @@ namespace FinanceApp.Domain.Interfaces.Repositories
         Task<decimal> GetSumAsync(Guid accountId, CategoryType type, DateTime from, DateTime to);
         Task<List<Transaction>> GetByAccountAndPeriodAsync(Guid accountId, DateTime from, DateTime to);
         Task<List<Transaction>> GetLastNonTransferAsync(int count);
+        Task<decimal> GetTotalProfitAsync(DateTime from, DateTime to);
 
 
     }

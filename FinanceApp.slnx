@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="docker-compose.yaml" />
+  </Folder>
   <Project Path="FinanceApp.Api/FinanceApp.Api.csproj" Id="f5eaf7b4-5bd0-4f4d-b28b-0405722f4b11" />
   <Project Path="FinanceApp.Application/FinanceApp.Application.csproj" Id="bc797a4b-278e-4a9d-920c-92fe1593c367" />
   <Project Path="FinanceApp.ConsoleUI/FinanceApp.ConsoleUI.csproj" Id="62deaaa7-0ac5-4eee-be06-b24f15bfe950" />

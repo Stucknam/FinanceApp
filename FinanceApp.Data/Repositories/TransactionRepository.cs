@@ -2,14 +2,11 @@
 using FinanceApp.Domain.Interfaces.Repositories;
 using FinanceApp.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 
 namespace FinanceApp.Data.Repositories
 {
-    public class TransactionRepository: Repository<Transaction>, ITransactionRepository
+    public class TransactionRepository : Repository<Transaction>, ITransactionRepository
     {
         public TransactionRepository(FinanceDbContext context) : base(context) { }
 
@@ -41,5 +38,15 @@ namespace FinanceApp.Data.Repositories
                 .ToListAsync();
         }
 
+        public async Task<decimal> GetTotalProfitAsync(DateTime from, DateTime to)
+        {
+            return await _dbSet.Where(t => t.Date >= from && t.Date < to.AddDays(1))
+        .GroupBy(t => 1)
+        .Select(g =>
+            g.Where(t => t.Type == CategoryType.Income).Sum(t => t.Amount) -
+            g.Where(t => t.Type == CategoryType.Expense).Sum(t => t.Amount)
+        )
+        .SingleOrDefaultAsync();
+        }
     }
 }

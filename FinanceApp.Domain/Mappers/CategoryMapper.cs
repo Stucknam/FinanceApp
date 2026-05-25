@@ -15,9 +15,35 @@ namespace FinanceApp.Domain.Mappers
                 Id = model.Id,
                 Name = model.Name,
                 Type = model.Type,
-                ColorId = model.ColorId,
                 IconId = model.IconId,
+                ColorId = model.ColorId
+            };
+        }
+
+        public static Category ToModel(this CreateCategoryDto dto)
+        {
+            return new Category
+            {
+                Id = Guid.NewGuid(),
+                Name = dto.Name ?? string.Empty,
+                IconId = dto.IconId,
+                ColorId = dto.ColorId,
+                Type = dto.Type
+            };
+        }
+
+        public static Category ToModel(this CategoryDto dto)
+        {
+            return new Category
+            {
+                Id = dto.Id,
+                Name = dto.Name ?? string.Empty,
+                IconId = dto.IconId,
+                ColorId = dto.ColorId,
+                Type = dto.Type
             };
         }
     }
+
 }
+

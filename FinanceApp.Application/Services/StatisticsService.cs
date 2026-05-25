@@ -1,4 +1,5 @@
-﻿using FinanceApp.Domain.Interfaces.Srevices;
+﻿using FinanceApp.Domain.Interfaces.Repositories;
+using FinanceApp.Domain.Interfaces.Srevices;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,11 +9,14 @@ namespace FinanceApp.Application.Services
     public class StatisticsService : IStatisticsService
     {
         private readonly IAccountService _accounts;
+        private readonly ITransactionRepository _transactionRepository;
 
 
-        public StatisticsService(IAccountService accounts)
+        public StatisticsService(IAccountService accounts, ITransactionRepository transaction)
         {
             _accounts = accounts;
+            _transactionRepository = transaction;
+
         }
         //public async Task<decimal> GetBalanceForVisibleAccountsAsync()
         //{
@@ -42,14 +46,7 @@ namespace FinanceApp.Application.Services
 
         public async Task<decimal> GetTotalProfitAsync(DateTime from, DateTime to)
         {
-            var accounts = await _accounts.GetAccountsAsync();
-
-            var tasks = accounts
-                .Select(a => _accounts.GetProfitAsync(a.Id, from, to));
-
-            var results = await Task.WhenAll(tasks);
-
-            return results.Sum();
+            return await _transactionRepository.GetTotalProfitAsync(from, to);
         }
     }
 }
