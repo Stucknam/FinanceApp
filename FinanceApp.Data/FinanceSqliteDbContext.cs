@@ -3,9 +3,10 @@ using FinanceApp.Domain.Models;
 
 namespace FinanceApp.Data
 {
-    public class FinanceDbContext: DbContext
+    public class FinanceSqliteDbContext : DbContext
     {
-        public FinanceDbContext(DbContextOptions<FinanceDbContext> options) : base(options) { }
+        public FinanceSqliteDbContext(DbContextOptions<FinanceSqliteDbContext> options)
+            : base(options) { }
 
         public DbSet<Account> Accounts => Set<Account>();
         public DbSet<Category> Categories => Set<Category>();
@@ -14,7 +15,8 @@ namespace FinanceApp.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(FinanceDbContext).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(FinanceSqliteDbContext).Assembly);
         }
     }
 }
+

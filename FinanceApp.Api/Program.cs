@@ -23,7 +23,12 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
     ConnectionMultiplexer.Connect("localhost:6379"));
 
 
-builder.Services.AddData(builder.Configuration);
+#if DEBUG
+builder.Services.AddDataSqlite(builder.Configuration); // SQLite в DEBUG
+#else
+builder.Services.AddData(builder.Configuration); // PostgreSQL в RELEASE
+#endif
+
 builder.Services.AddApplication();
 
 

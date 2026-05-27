@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: ./src/FinanceApp.Api
+      dockerfile: Dockerfile
+    ports:
+      - "5000:8080"
+    depends_on:
+      - redis
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      Redis__ConnectionString: "redis:6379"
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]

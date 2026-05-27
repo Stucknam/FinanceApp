@@ -26,7 +26,7 @@ namespace FinanceApp.Domain.Mappers
             {
                 Id = Guid.NewGuid(),
                 Name = dto.Name ?? string.Empty,
-                IconId = dto.IconId,
+                IconId = dto.IconId ?? string.Empty,
                 ColorId = dto.ColorId,
                 Type = dto.Type
             };
@@ -38,7 +38,7 @@ namespace FinanceApp.Domain.Mappers
             {
                 Id = dto.Id,
                 Name = dto.Name ?? string.Empty,
-                IconId = dto.IconId,
+                IconId = dto.IconId ?? string.Empty,
                 ColorId = dto.ColorId,
                 Type = dto.Type
             };

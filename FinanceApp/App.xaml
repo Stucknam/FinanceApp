@@ -4,6 +4,5 @@
              xmlns:local="clr-namespace:FinanceApp"
              xmlns:conv="clr-namespace:FinanceApp.Converter">
     <Application.Resources>
-        <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
     </Application.Resources>
 </Application>

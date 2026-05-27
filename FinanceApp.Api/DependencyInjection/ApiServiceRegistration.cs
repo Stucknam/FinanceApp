@@ -29,6 +29,22 @@ namespace FinanceApp.Api.DependencyInjection
             return services;
         }
 
+        public static IServiceCollection AddDataSqlite(this IServiceCollection services, IConfiguration config)
+        {
+            services.AddDbContext<FinanceDbContext>(options =>
+            {
+                options.UseSqlite("Data Source=finance.db");
+            });
+
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ITransactionRepository, TransactionRepository>();
+            services.AddScoped<ITransferRepository, TransferRepository>();
+
+
+            return services;
+        }
+
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddScoped<IAccountService, AccountService>();

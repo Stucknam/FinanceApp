@@ -33,11 +33,11 @@ namespace FinanceApp
 
                     services.AddSingleton<AppPaths>();
 
-                    services.AddSingleton<ISettingsService>(sp =>
-                    {
-                        var paths = sp.GetRequiredService<AppPaths>();
-                        return new SettingsService(paths.SettingsPath);
-                    });
+                    //services.AddSingleton<ISettingsService>(sp =>
+                    //{
+                    //    var paths = sp.GetRequiredService<AppPaths>();
+                    //    return new SettingsService(paths.SettingsPath);
+                    //});
 
 
                     // Регистрация репозиториев
@@ -55,7 +55,7 @@ namespace FinanceApp
                     //
                     
 
-                    services.AddSingleton<MainWindow>();
+                    //services.AddSingleton<MainWindow>();
                 })
                 .Build();
 
@@ -66,13 +66,13 @@ namespace FinanceApp
         {
             await AppHost.StartAsync();
 
-            var settings = AppHost.Services.GetRequiredService<ISettingsService>();
-            await settings.LoadAsync();
+            //var settings = AppHost.Services.GetRequiredService<ISettingsService>();
+            //await settings.LoadAsync();
 
 
 
-            var mainWindow = AppHost.Services.GetRequiredService<MainWindow>();
-            mainWindow.Show();
+            //var mainWindow = AppHost.Services.GetRequiredService<MainWindow>();
+            //mainWindow.Show();
             base.OnStartup(e);
         }
 
