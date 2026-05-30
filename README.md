@@ -25,7 +25,7 @@
 - EF Core  
 - PostgreSQL
 - Minimal API
-- SQLite (планируется)  
+- SQLite (частично)  
 - MAUI (планируется)  
 - WPF (заморожено)  
 - Репозиторный паттерн + Query()  
